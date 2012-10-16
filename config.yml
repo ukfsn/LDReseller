@@ -27,3 +27,10 @@ encoding:  'utf8'
 #     start_tag: '[%'
 #     end_tag:   '%]'
 
+plugins:
+  DBIC:
+    default:
+      dsn: dbi:SQLite:dbname=ldreseller.db
+      options:
+        sqlite_unicode: 1
+      schema_class: LDReseller::DB
