@@ -29,8 +29,18 @@ encoding:  'utf8'
 
 plugins:
   DBIC:
+    Auth:
+      dsn: dbi:SQLite:dbname=ldreseller.db
     default:
       dsn: dbi:SQLite:dbname=ldreseller.db
       options:
         sqlite_unicode: 1
       schema_class: LDReseller::DB
+  Auth::RBAC:
+    credentials:
+      class: DBIC
+      options:
+        password_type: self_check
+        login_field: username
+
+session: simple

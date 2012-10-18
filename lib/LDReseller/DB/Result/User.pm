@@ -5,6 +5,8 @@ use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
+use Authen::Passphrase;
+use Authen::Passphrase::MD5Crypt;
 
 __PACKAGE__->table("user");
 
@@ -39,5 +41,43 @@ __PACKAGE__->has_many(
   { "foreign.user" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+
+__PACKAGE__->has_many(
+  "roles",
+  "LDReseller::DB::Result::Role",
+  { "foreign.user" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+sub check_password {
+    my $self = shift;
+    my $password = shift;
+
+    if ( ! $password ) {
+        $self->errors('You must provide a password');
+        return;
+    }
+
+    my $p = Authen::Passphrase->from_crypt($self->password);
+    $p->match($password) ? 1 : 0;
+}
+
+sub password {
+    my $self = shift;
+    my $password = shift;
+
+    if ( ! $password ) {
+        $self->errors('You must provide a password');
+        return;
+    }
+
+    $self->update({
+        password => Authen::Passphrase::MD5Crypt->new(
+            salt_random => 1,
+            passphrase => $password
+        )->as_crypt;
+    });
+    return 1;
+}
 
 1;
