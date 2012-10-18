@@ -75,7 +75,7 @@ sub password {
         password => Authen::Passphrase::MD5Crypt->new(
             salt_random => 1,
             passphrase => $password
-        )->as_crypt;
+        )->as_crypt
     });
     return 1;
 }
