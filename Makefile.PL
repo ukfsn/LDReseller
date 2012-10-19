@@ -16,6 +16,7 @@ WriteMakefile(
         'YAML'       => 0,
         'Dancer'     => 1.31,
         'DBIx::Class::EncodedColumn'    => 0,
+        'DBIx::Class::InflateColumn::DateTime' => 0,
         'Dancer::Plugin::DBIC'  => 0,
         'Dancer::Plugin::FlashMessage'  => 0,
         'Digest::MD5'   => 0
