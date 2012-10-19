@@ -8,6 +8,8 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->table("invoice");
 
+__PACKAGE__->load_components(qw/InflateColumn::DateTime/);
+
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
