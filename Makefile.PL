@@ -15,6 +15,10 @@ WriteMakefile(
         'Test::More' => 0,
         'YAML'       => 0,
         'Dancer'     => 1.31,
+        'DBIx::Class::EncodedColumn'    => 0,
+        'Dancer::Plugin::DBIC'  => 0,
+        'Dancer::Plugin::FlashMessage'  => 0,
+        'Digest::MD5'   => 0
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'LDReseller-*' },

@@ -11,6 +11,15 @@ get '/' => sub {
     template 'index';
 };
 
+post '/login' => sub {
+    if ( ! params->{login} || ! params->{password} ) {
+        return template 'login';
+    }
+    my $auth = auth(params->{login}, params->{password});
+    # XXX Carry on!
+
+};
+
 post '/order' => sub {
 
 };
