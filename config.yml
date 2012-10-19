@@ -23,7 +23,7 @@ charset: "UTF-8"
 template: "template_toolkit"
 engines:
   template_toolkit:
-encoding:  'utf8'
+    encoding:  'utf8'
 #     start_tag: '[%'
 #     end_tag:   '%]'
 
@@ -42,5 +42,6 @@ plugins:
       options:
         password_type: self_check
         login_field: username
+        name_field: username
 
 session: simple
