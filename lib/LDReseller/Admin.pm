@@ -11,6 +11,7 @@ get '/' => sub {
 get '/*' => sub {
     my $thing = splat;
     my @t = schema->resultset($thing)->all();
+    debug "About to render admin/$thing";
     template "admin/$thing", { $thing => \@t };
 };
 

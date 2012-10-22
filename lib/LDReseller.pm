@@ -3,14 +3,13 @@ use Dancer ':syntax';
 use Dancer::Plugin::DBIC 'schema';
 use Dancer::Plugin::Auth::RBAC;
 use Dancer::Plugin::FlashMessage;
-
-use LDReseller::Admin;
+use HTML::FormFu;
 
 our $VERSION = '0.1';
 
 hook 'before' => sub {
     my %noauth = ();
-    map {$noauth{$_}++} qw{/ /login /logout};
+    map {$noauth{$_}++} qw{/ /login /signup};
 
     if (! session('user') && ! $noauth{request->path_info}) {
         var requested_path => request->path_info;
@@ -22,25 +21,36 @@ get '/' => sub {
     template 'index';
 };
 
-get '/login' => sub {
-    template 'login', { path => vars->{requested_path} };
-};
-
-post '/login' => sub {
-    if ( ! params->{login} || ! params->{password} ) {
-        return template 'login', {path => vars->{requested_path}};
+any ['get', 'post'] => '/login' => sub {
+    my $form = _getform();
+    if ( $form->submitted_and_valid ) {
+        my $auth = auth($form->param_value('login'),
+                        $form->param_value('password')
+                        );
+        if ( ! $auth->errors ) {
+            redirect params->{'path'} || '/';
+        }
+        flash error => 'Login Invalid';
     }
-    my $auth = auth(params->{login}, params->{password});
-    if ( $auth->errors ) {
-        flash error => "Login failed";
-        return template 'login', { path => vars->{requested_path} };
-    }
-    redirect params->{path} || '/';
+    template 'login', { form => $form,
+                        path => vars->{requested_path}
+    };
 };
 
 get '/logout' => sub {
     session->destroy;
     redirect '/';
+};
+
+sub _getform {
+    my $self = shift;
+    my $p = shift || request->path;
+    $p =~ s/\///;
+    my $form = HTML::FormFu->new();
+    $form->load_config_file(config->{forms}."$p.yml");
+    my $params = params();
+    $form->process($params);
+    return $form;
 }
 
 true;
