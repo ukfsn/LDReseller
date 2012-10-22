@@ -40,6 +40,8 @@ plugins:
         sqlite_unicode: 1
       schema_class: LDReseller::DB
   Auth::RBAC:
+    permissions:
+      class: DBIC
     credentials:
       class: DBIC
       options:

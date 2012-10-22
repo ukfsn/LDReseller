@@ -24,7 +24,7 @@ get '/' => sub {
 any ['get', 'post'] => '/login' => sub {
     my $form = _getform();
     if ( $form->submitted_and_valid ) {
-        my $auth = auth($form->param_value('login'),
+        my $auth = auth($form->param_value('user'),
                         $form->param_value('password')
                         );
         if ( ! $auth->errors ) {
